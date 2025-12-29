@@ -1,21 +1,8 @@
 # frozen_string_literal: true
 
+require_relative 'tokenizer/errors'
+
 module Calculator
-  module TokenKind
-    PLUS = :plus
-    MINUS = :minus
-    DIV = :div
-    MUL = :mul
-    PAREN_OPEN = :paren_open
-    PAREN_CLOSE = :paren_close
-    NUMBER = :number
-  end
-
-  module Token
-    Operator = Data.define(:type)
-    Literal = Data.define(:type, :value)
-  end
-
   class Tokenizer
     OPERATORS = {
       '+' => TokenKind::PLUS,
@@ -56,12 +43,12 @@ module Calculator
         number, chars_consumed = parse_number(pos, input)
         [Token::Literal.new(TokenKind::NUMBER, number), chars_consumed]
       else
-        raise ArgumentError, "Invalid token encountered at position #{pos}"
+        raise TokenizerParseError, pos
       end
     end
 
     # @param input [String]
-    # @return [Float, Fixnum] the parsed number and the amount of tokens consumed
+    # @return [Float, Integer] the parsed number and the amount of tokens consumed
     def parse_number(num_start, input)
       num_end = scan_number_end(num_start, input)
 
@@ -77,7 +64,7 @@ module Calculator
       while pos < input.length
         ch = input[pos]
         if dot?(ch)
-          raise ArgumentError, "Invalid dot at #{pos}" if seen_dot
+          raise TokenizerParseError, pos, "Invalid dot at #{pos}" if seen_dot
 
           seen_dot = true
         elsif !numeric?(ch)

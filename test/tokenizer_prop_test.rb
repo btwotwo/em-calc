@@ -5,7 +5,7 @@ require 'minitest/autorun'
 
 require 'prop_check'
 
-require_relative '../src/tokenizer'
+require_relative '../lib/calculator/'
 
 module Calculator
   G = PropCheck::Generators
@@ -13,11 +13,11 @@ module Calculator
 
   describe Tokenizer do
     def convert_token(token)
-      case token.type
+      case token.kind
       when TokenKind::NUMBER
         token.value.to_s
       else
-        OPERATOR_SYMBOLS.fetch(token.type) do
+        OPERATOR_SYMBOLS.fetch(token.kind) do
           raise ArgumentError, "Unknown token encountered: #{token.inspect}"
         end
       end

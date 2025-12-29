@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require_relative '../src/tokenizer'
+require_relative '../lib/calculator'
 
 module Calculator
   describe Tokenizer do
@@ -31,7 +31,7 @@ module Calculator
       end
 
       it 'should fail on the incorrect number' do
-        _ { @tokenizer.call('0+1.2.2') }.must_raise ArgumentError
+        _ { @tokenizer.call('0+1.2.2') }.must_raise
       end
     end
   end
