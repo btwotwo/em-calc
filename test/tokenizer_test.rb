@@ -13,9 +13,9 @@ module Calculator
       it 'should return a list of tokens' do
         tokens = @tokenizer.call('1 + 2')
         _(tokens).must_equal [
-          Token::Literal.new(:number, 1, 0),
-          Token::Operator.new(:plus, 2),
-          Token::Literal.new(:number, 2, 4)
+          Token::Literal.new(:number, 1),
+          Token::Operator.new(:plus),
+          Token::Literal.new(:number, 2)
         ]
       end
     end
@@ -24,9 +24,9 @@ module Calculator
       it 'should parse correct number' do
         tokens = @tokenizer.call('0 + 1.2')
         _(tokens).must_equal [
-          Token::Literal.new(:number, 0, 0),
-          Token::Operator.new(:plus, 2),
-          Token::Literal.new(:number, 1.2, 4)
+          Token::Literal.new(:number, 0),
+          Token::Operator.new(:plus),
+          Token::Literal.new(:number, 1.2)
         ]
       end
 

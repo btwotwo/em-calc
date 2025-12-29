@@ -12,12 +12,12 @@ module Calculator
   end
 
   module Token
-    Operator = Data.define(:type, :pos)
-    Literal = Data.define(:type, :value, :pos)
+    Operator = Data.define(:type)
+    Literal = Data.define(:type, :value)
   end
 
   class Tokenizer
-    TOKENS = {
+    OPERATORS = {
       '+' => TokenKind::PLUS,
       '-' => TokenKind::MINUS,
       '/' => TokenKind::DIV,
@@ -49,12 +49,12 @@ module Calculator
     private
 
     def get_token(char, pos, input)
-      sym = TOKENS[char]
+      sym = OPERATORS[char]
       if sym
-        [Token::Operator.new(sym, pos), 1]
+        [Token::Operator.new(sym), 1]
       elsif numeric?(char)
         number, chars_consumed = parse_number(pos, input)
-        [Token::Literal.new(TokenKind::NUMBER, number, pos), chars_consumed]
+        [Token::Literal.new(TokenKind::NUMBER, number), chars_consumed]
       else
         raise ArgumentError, "Invalid token encountered at position #{pos}"
       end
