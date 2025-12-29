@@ -4,4 +4,5 @@ source "https://rubygems.org"
 
 # gem "rails"
 
-gem "minitest-proptest", "~> 0.4.0"
+gem "prop_check", "~> 1.0"
+gem "solargraph", "~> 0.57.0", group: :development
