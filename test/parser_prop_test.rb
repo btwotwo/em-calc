@@ -8,7 +8,7 @@ module Calculator
 
   describe Parser do
     def expression_leaf_generator
-      G.instance(Expression::Literal, kind: G.constant(:number), value: G.real_positive_float)
+      G.instance(Expression::Literal, kind: G.constant(:number), value: G.positive_integer)
     end
 
     def unary_kind_gen
@@ -39,9 +39,10 @@ module Calculator
     it 'processes valid token sequences' do
       PropCheck.forall(expression_generator) do |expr|
         tokens = expr.to_tokens
-
         ast = Parser.call(tokens)
-        _(ast).wont_be_nil
+        _(expr.evaluate).must_equal ast.evaluate
+      rescue ZeroDivisionError
+        puts 'Caught expected Zero Division Error'
       end
     end
   end

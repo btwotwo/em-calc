@@ -9,9 +9,11 @@ module Calculator
                         in Expression::Kind::ADD then TokenKind::PLUS
                         end
         [
+          Token::Operator.new(TokenKind::PAREN_OPEN),
           *left_expr.to_tokens,
           Token::Operator.new(operator_kind),
-          *right_expr.to_tokens
+          *right_expr.to_tokens,
+          Token::Operator.new(TokenKind::PAREN_CLOSE)
         ]
       end
     end
@@ -20,7 +22,9 @@ module Calculator
       def to_tokens
         [
           Token::Operator.new(TokenKind::MINUS),
-          *expr.to_tokens
+          Token::Operator.new(TokenKind::PAREN_OPEN),
+          *expr.to_tokens,
+          Token::Operator.new(TokenKind::PAREN_CLOSE)
         ]
       end
     end

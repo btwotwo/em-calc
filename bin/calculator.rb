@@ -6,7 +6,8 @@ require_relative '../lib/calculator'
 module Calculator
   if $PROGRAM_NAME == __FILE__
     input = readline(chomp: true)
-    tokens = Tokenizer.new.call(input)
-    puts tokens
+    tokens = Tokenizer.call(input)
+    ast = Parser.call(tokens)
+    puts ast.evaluate
   end
 end
