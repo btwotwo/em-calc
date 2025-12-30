@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'parser/expression'
+require_relative 'parser/errors'
 
 module Calculator
   # The parser is implemented using recursive descent approach.
@@ -9,7 +10,8 @@ module Calculator
   # expression      -> additive ;
   # additive        -> multiplicative ( ('+' | '-' ) multiplicative )* ;
   # multiplicative  -> unary ( ('*' | '/') unary )* ;
-  # unary           -> "-" unary | primary ;
+  # unary           -> "-" unary | function_call ;
+  # function_call   -> Identifier "(" expression ")" | primary;
   # primary         -> NumberLiteral | "(" expression ")" ;
   class Parser
     # @param tokens [Array]
@@ -25,7 +27,7 @@ module Calculator
     # @param tokens [Array]
     def call
       expr = expression
-      raise ArgumentError, 'Extra tokens!' unless eof?
+      raise ParserError, 'Extra tokens left in the expression!' unless eof?
 
       expr
     end
@@ -76,12 +78,30 @@ module Calculator
         expr = parse_unary
         Expression::Unary.new(Expression::Kind::NEGATE, expr)
       else
+        parse_function_call
+      end
+    end
+
+    def parse_function_call
+      if current_matches?(TokenKind::SQRT)
+        consume_token
+        if current_token.kind == TokenKind::PAREN_OPEN
+          consume_token
+          expr = expression
+
+          raise ParserError, 'Unclosed paren in function call.' unless current_token.kind == TokenKind::PAREN_CLOSE
+
+          consume_token
+
+          Expression::Function.new(Expression::Kind::SQRT, expr)
+        end
+      else
         parse_primary
       end
     end
 
     def parse_primary
-      raise ArgumentError, 'Reached EOF' if eof?
+      raise ParserError, 'Encountered unfinished expression!' if eof?
 
       token = consume_token
 
@@ -89,15 +109,15 @@ module Calculator
         Expression::Literal.new(Expression::Kind::NUMBER, token.value)
       elsif token.kind == TokenKind::PAREN_OPEN
         expr = expression
-        raise ArgumentError, 'Reached EOF without closed paren' if eof?
+        raise ParserError, 'Encountered unclosed paren' if eof?
 
         next_token = consume_token
-        raise ArgumentError, 'Unclosed paren encountered' unless next_token.kind == TokenKind::PAREN_CLOSE
+        raise ParserError, 'Encountered unclosed paren' unless next_token.kind == TokenKind::PAREN_CLOSE
 
         Expression::Group.new(expr)
 
       else
-        raise ArgumentError, "Unexpected token #{token.inspect}"
+        raise ParserError, "Unexpected token #{token.inspect}"
       end
     end
 

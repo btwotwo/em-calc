@@ -46,5 +46,16 @@ module Calculator
         ]
       end
     end
+
+    class Function
+      def to_tokens
+        [
+          Token::Operator.new(TokenKind::SQRT), # Only sqrt for now
+          Token::Operator.new(TokenKind::PAREN_OPEN),
+          *expr.to_tokens,
+          Token::Operator.new(TokenKind::PAREN_CLOSE)
+        ]
+      end
+    end
   end
 end

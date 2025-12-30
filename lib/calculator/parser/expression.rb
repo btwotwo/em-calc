@@ -7,6 +7,7 @@ module Calculator
       DIV = :div
 
       NEGATE = :negate
+      SQRT = :sqrt
 
       NUMBER = :number
     end
@@ -30,7 +31,6 @@ module Calculator
         in Kind::NEGATE then -expr.evaluate
         else
           raise ArgumentError, 'Invalid expression kind!'
-
         end
       end
     end
@@ -41,6 +41,16 @@ module Calculator
         in Kind::NUMBER then value
         else
           raise ArgumentError, 'Invalid expression kind!'
+        end
+      end
+    end
+
+    class Function < Data.define(:kind, :expr)
+      def evaluate
+        case kind
+        in Kind::SQRT then Math.sqrt(expr.evaluate)
+        else
+          raise ArgumentError, "Invalid function kind!"
         end
       end
     end

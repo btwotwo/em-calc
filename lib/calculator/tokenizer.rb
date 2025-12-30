@@ -11,7 +11,8 @@ module Calculator
       %r{/} => TokenKind::DIV,
       /\*/ => TokenKind::MUL,
       /\(/ => TokenKind::PAREN_OPEN,
-      /\)/ => TokenKind::PAREN_CLOSE
+      /\)/ => TokenKind::PAREN_CLOSE,
+      /sqrt/ => TokenKind::SQRT
     }.freeze
 
     NUM_PATTERN = /\d+(\.\d+)?/.freeze

@@ -8,7 +8,7 @@ module Calculator
 
   describe Parser do
     def expression_leaf_generator
-      G.instance(Expression::Literal, kind: G.constant(:number), value: G.positive_integer)
+      G.instance(Expression::Literal, kind: G.constant(:number), value: G.real_positive_float)
     end
 
     def unary_kind_gen
@@ -26,12 +26,19 @@ module Calculator
       )
     end
 
+    def function_kind_gen
+      G.one_of(
+        G.constant(Expression::Kind::SQRT)
+      )
+    end
+
     def expression_generator
       G.tree(expression_leaf_generator) do |subtree_gen|
         G.one_of(
           G.instance(Expression::Binary, kind: binary_kind_gen, left_expr: subtree_gen, right_expr: subtree_gen),
           G.instance(Expression::Unary, kind: unary_kind_gen, expr: subtree_gen),
-          G.instance(Expression::Group, expr: subtree_gen)
+          G.instance(Expression::Group, expr: subtree_gen),
+          G.instance(Expression::Function, kind: function_kind_gen, expr: subtree_gen)
         )
       end
     end
@@ -41,8 +48,8 @@ module Calculator
         tokens = expr.to_tokens
         ast = Parser.call(tokens)
         _(expr.evaluate).must_equal ast.evaluate
-      rescue ZeroDivisionError
-        puts 'Caught expected Zero Division Error'
+      rescue ZeroDivisionError, Math::DomainError
+        # expected potential exceptions
       end
     end
   end

@@ -15,9 +15,10 @@ module Calculator
     TokenKind::DIV => '/',
     TokenKind::MUL => '*',
     TokenKind::PAREN_OPEN => '(',
-    TokenKind::PAREN_CLOSE => ')'
+    TokenKind::PAREN_CLOSE => ')',
+    TokenKind::SQRT => 'sqrt'
   }.freeze
-  
+
   describe Tokenizer do
     def convert_token(token)
       case token.kind

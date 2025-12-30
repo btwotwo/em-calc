@@ -9,6 +9,7 @@ module Calculator
     PAREN_OPEN = :paren_open
     PAREN_CLOSE = :paren_close
     NUMBER = :number
+    SQRT = :sqrt
   end
 
   module Token
