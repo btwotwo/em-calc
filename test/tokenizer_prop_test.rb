@@ -10,7 +10,6 @@ require_relative '../lib/calculator/'
 module Calculator
   G = PropCheck::Generators
   OPERATOR_SYMBOLS = Tokenizer::OPERATORS.invert
-
   describe Tokenizer do
     def convert_token(token)
       case token.kind
@@ -21,6 +20,14 @@ module Calculator
           raise ArgumentError, "Unknown token encountered: #{token.inspect}"
         end
       end
+    end
+
+    def token_kind_generator
+      tokens_gen = Tokenizer::OPERATORS.values.map do |type|
+        G.constant(type)
+      end
+
+      G.one_of(*tokens_gen)
     end
 
     def decimal_number_str_generator
@@ -34,11 +41,16 @@ module Calculator
     end
 
     def operator_generator
-      G.one_of(*Tokenizer::OPERATORS.values.map { |type| G.constant(type) }).map { |op| Token::Operator.new(op) }
+      G.instance(
+        Token::Operator,
+        kind: token_kind_generator
+      )
     end
 
     def num_literal_generator
-      decimal_number_str_generator.map { |num_str| Token::Literal.new(:number, num_str.to_f) }
+      G.instance(Token::Literal,
+                 kind: G.constant(:number),
+                 value: decimal_number_str_generator.map(&:to_f))
     end
 
     def tokens_generator
