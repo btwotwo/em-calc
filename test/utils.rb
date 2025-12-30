@@ -37,7 +37,7 @@ module Calculator
       def to_tokens
         [
           Token::Operator.new(TokenKind::PAREN_OPEN),
-          expr.to_tokens,
+          *expr.to_tokens,
           Token::Operator.new(TokenKind::PAREN_CLOSE)
         ]
       end

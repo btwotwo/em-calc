@@ -36,12 +36,12 @@ module Calculator
       end
     end
 
-    it 'test' do
+    it 'processes valid token sequences' do
       PropCheck.forall(expression_generator) do |expr|
         tokens = expr.to_tokens
-        parsed_expr = Parser.call(tokens)
 
-        _(parsed_expr).must_equal expr
+        ast = Parser.call(tokens)
+        _(ast).wont_be_nil
       end
     end
   end

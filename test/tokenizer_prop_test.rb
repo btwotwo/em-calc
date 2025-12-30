@@ -9,7 +9,15 @@ require_relative '../lib/calculator/'
 
 module Calculator
   G = PropCheck::Generators
-  OPERATOR_SYMBOLS = Tokenizer::OPERATORS.invert
+  OPERATOR_SYMBOLS = {
+    TokenKind::PLUS => '+',
+    TokenKind::MINUS => '-',
+    TokenKind::DIV => '/',
+    TokenKind::MUL => '*',
+    TokenKind::PAREN_OPEN => '(',
+    TokenKind::PAREN_CLOSE => ')'
+  }.freeze
+  
   describe Tokenizer do
     def convert_token(token)
       case token.kind
@@ -57,15 +65,11 @@ module Calculator
       G.array(G.one_of(operator_generator, num_literal_generator))
     end
 
-    before do
-      @tokenizer = Calculator::Tokenizer.new
-    end
-
     describe 'when given a random tokenized input converted to string' do
       it 'should be tokenized to the exact same input' do
         PropCheck.forall(tokens_generator) do |tokens|
           tokens_string = tokens.map { |token| convert_token(token) }.join(' ')
-          tokenized_string = @tokenizer.call(tokens_string)
+          tokenized_string = Tokenizer.call(tokens_string)
 
           _(tokenized_string).must_equal tokens
         end
