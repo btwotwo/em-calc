@@ -2,18 +2,16 @@ module Calculator
   module Expression
     class Binary
       def to_tokens
-        operator_kind = case @kind
+        operator_kind = case kind
                         in Expression::Kind::MUL then TokenKind::MUL
                         in Expression::Kind::DIV then TokenKind::DIV
                         in Expression::Kind::SUB then TokenKind::MINUS
                         in Expression::Kind::ADD then TokenKind::PLUS
                         end
         [
-          Token::Literal.new(TokenKind::PAREN_OPEN),
-          *@left_expr.to_tokens,
+          *left_expr.to_tokens,
           Token::Operator.new(operator_kind),
-          *@right_expr.to_tokens,
-          Token::Literal.new(TokenKind::PAREN_CLOSE)
+          *right_expr.to_tokens
         ]
       end
     end
@@ -22,7 +20,7 @@ module Calculator
       def to_tokens
         [
           Token::Operator.new(TokenKind::MINUS),
-          *@expr.to_tokens
+          *expr.to_tokens
         ]
       end
     end
@@ -30,7 +28,7 @@ module Calculator
     class Literal
       def to_tokens
         [
-          Token::Literal.new(TokenKind::NUMBER, @value)
+          Token::Literal.new(kind: TokenKind::NUMBER, value: value)
         ]
       end
     end
@@ -39,7 +37,7 @@ module Calculator
       def to_tokens
         [
           Token::Operator.new(TokenKind::PAREN_OPEN),
-          *@expr.to_tokens,
+          expr.to_tokens,
           Token::Operator.new(TokenKind::PAREN_CLOSE)
         ]
       end
