@@ -6,13 +6,13 @@ require_relative 'tokenizer/errors'
 module Calculator
   class Tokenizer
     OPERATORS = {
-      /\+/ => TokenKind::PLUS,
-      /-/ => TokenKind::MINUS,
-      %r{/} => TokenKind::DIV,
-      /\*/ => TokenKind::MUL,
-      /\(/ => TokenKind::PAREN_OPEN,
-      /\)/ => TokenKind::PAREN_CLOSE,
-      /sqrt/ => TokenKind::SQRT
+      /\+/ => Token::Kind::PLUS,
+      /-/ => Token::Kind::MINUS,
+      %r{/} => Token::Kind::DIV,
+      /\*/ => Token::Kind::MUL,
+      /\(/ => Token::Kind::PAREN_OPEN,
+      /\)/ => Token::Kind::PAREN_CLOSE,
+      /sqrt/ => Token::Kind::SQRT
     }.freeze
 
     NUM_PATTERN = /\d+(\.\d+)?/.freeze
@@ -44,7 +44,7 @@ module Calculator
         num = scanner.scan(NUM_PATTERN)
 
         if num
-          tokens << Token::Literal.new(TokenKind::NUMBER, num.to_f)
+          tokens << Token::Literal.new(Token::Kind::NUMBER, num.to_f)
           next
         end
 

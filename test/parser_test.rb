@@ -26,10 +26,10 @@ module Calculator
 
     describe 'basic binary operation' do
       test_cases = [
-        { token: TokenKind::MUL, op: Expression::Kind::MUL },
-        { token: TokenKind::DIV, op: Expression::Kind::DIV },
-        { token: TokenKind::PLUS, op: Expression::Kind::ADD },
-        { token: TokenKind::MINUS, op: Expression::Kind::SUB }
+        { token: Token::Kind::MUL, op: Expression::Kind::MUL },
+        { token: Token::Kind::DIV, op: Expression::Kind::DIV },
+        { token: Token::Kind::PLUS, op: Expression::Kind::ADD },
+        { token: Token::Kind::MINUS, op: Expression::Kind::SUB }
       ]
 
       test_cases.each do |test_case|

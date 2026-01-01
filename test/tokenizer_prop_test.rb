@@ -10,19 +10,19 @@ require_relative '../lib/calculator/'
 module Calculator
   G = PropCheck::Generators
   OPERATOR_SYMBOLS = {
-    TokenKind::PLUS => '+',
-    TokenKind::MINUS => '-',
-    TokenKind::DIV => '/',
-    TokenKind::MUL => '*',
-    TokenKind::PAREN_OPEN => '(',
-    TokenKind::PAREN_CLOSE => ')',
-    TokenKind::SQRT => 'sqrt'
+    Token::Kind::PLUS => '+',
+    Token::Kind::MINUS => '-',
+    Token::Kind::DIV => '/',
+    Token::Kind::MUL => '*',
+    Token::Kind::PAREN_OPEN => '(',
+    Token::Kind::PAREN_CLOSE => ')',
+    Token::Kind::SQRT => 'sqrt'
   }.freeze
 
   describe Tokenizer do
     def convert_token(token)
       case token.kind
-      when TokenKind::NUMBER
+      when Token::Kind::NUMBER
         token.value.to_s
       else
         OPERATOR_SYMBOLS.fetch(token.kind) do

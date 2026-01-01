@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'parser/expression'
 require_relative 'parser/errors'
 
 module Calculator
@@ -40,11 +39,11 @@ module Calculator
 
     def parse_additive
       left = parse_multiplicative
-      while current_matches?(TokenKind::PLUS) || current_matches?(TokenKind::MINUS)
+      while current_matches?(Token::Kind::PLUS) || current_matches?(Token::Kind::MINUS)
         token = consume_token
         operation_kind = case token.kind
-                         in TokenKind::PLUS then Expression::Kind::ADD
-                         in TokenKind::MINUS then Expression::Kind::SUB
+                         in Token::Kind::PLUS then Expression::Kind::ADD
+                         in Token::Kind::MINUS then Expression::Kind::SUB
                          end
         right = parse_multiplicative
         expr = Expression::Binary.new(operation_kind, left, right)
@@ -58,11 +57,11 @@ module Calculator
     def parse_multiplicative
       left = parse_unary
 
-      while current_matches?(TokenKind::DIV) || current_matches?(TokenKind::MUL)
+      while current_matches?(Token::Kind::DIV) || current_matches?(Token::Kind::MUL)
         token = consume_token
         operation_kind = case token.kind
-                         in TokenKind::DIV then Expression::Kind::DIV
-                         in TokenKind::MUL then Expression::Kind::MUL
+                         in Token::Kind::DIV then Expression::Kind::DIV
+                         in Token::Kind::MUL then Expression::Kind::MUL
                          end
         right = parse_unary
         expr = Expression::Binary.new(operation_kind, left, right)
@@ -73,7 +72,7 @@ module Calculator
     end
 
     def parse_unary
-      if current_matches?(TokenKind::MINUS)
+      if current_matches?(Token::Kind::MINUS)
         consume_token
         expr = parse_unary
         Expression::Unary.new(Expression::Kind::NEGATE, expr)
@@ -83,13 +82,13 @@ module Calculator
     end
 
     def parse_function_call
-      if current_matches?(TokenKind::SQRT)
+      if current_matches?(Token::Kind::SQRT)
         consume_token
-        if current_token.kind == TokenKind::PAREN_OPEN
+        if current_token.kind == Token::Kind::PAREN_OPEN
           consume_token
           expr = expression
 
-          raise ParserError, 'Unclosed paren in function call.' unless current_token.kind == TokenKind::PAREN_CLOSE
+          raise ParserError, 'Unclosed paren in function call.' unless current_token.kind == Token::Kind::PAREN_CLOSE
 
           consume_token
 
@@ -105,14 +104,14 @@ module Calculator
 
       token = consume_token
 
-      if token.kind == TokenKind::NUMBER
+      if token.kind == Token::Kind::NUMBER
         Expression::Literal.new(Expression::Kind::NUMBER, token.value)
-      elsif token.kind == TokenKind::PAREN_OPEN
+      elsif token.kind == Token::Kind::PAREN_OPEN
         expr = expression
         raise ParserError, 'Encountered unclosed paren' if eof?
 
         next_token = consume_token
-        raise ParserError, 'Encountered unclosed paren' unless next_token.kind == TokenKind::PAREN_CLOSE
+        raise ParserError, 'Encountered unclosed paren' unless next_token.kind == Token::Kind::PAREN_CLOSE
 
         Expression::Group.new(expr)
 

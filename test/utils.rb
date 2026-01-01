@@ -3,17 +3,17 @@ module Calculator
     class Binary
       def to_tokens
         operator_kind = case kind
-                        in Expression::Kind::MUL then TokenKind::MUL
-                        in Expression::Kind::DIV then TokenKind::DIV
-                        in Expression::Kind::SUB then TokenKind::MINUS
-                        in Expression::Kind::ADD then TokenKind::PLUS
+                        in Expression::Kind::MUL then Token::Kind::MUL
+                        in Expression::Kind::DIV then Token::Kind::DIV
+                        in Expression::Kind::SUB then Token::Kind::MINUS
+                        in Expression::Kind::ADD then Token::Kind::PLUS
                         end
         [
-          Token::Operator.new(TokenKind::PAREN_OPEN),
+          Token::Operator.new(Token::Kind::PAREN_OPEN),
           *left_expr.to_tokens,
           Token::Operator.new(operator_kind),
           *right_expr.to_tokens,
-          Token::Operator.new(TokenKind::PAREN_CLOSE)
+          Token::Operator.new(Token::Kind::PAREN_CLOSE)
         ]
       end
     end
@@ -21,10 +21,10 @@ module Calculator
     class Unary
       def to_tokens
         [
-          Token::Operator.new(TokenKind::MINUS),
-          Token::Operator.new(TokenKind::PAREN_OPEN),
+          Token::Operator.new(Token::Kind::MINUS),
+          Token::Operator.new(Token::Kind::PAREN_OPEN),
           *expr.to_tokens,
-          Token::Operator.new(TokenKind::PAREN_CLOSE)
+          Token::Operator.new(Token::Kind::PAREN_CLOSE)
         ]
       end
     end
@@ -32,7 +32,7 @@ module Calculator
     class Literal
       def to_tokens
         [
-          Token::Literal.new(kind: TokenKind::NUMBER, value: value)
+          Token::Literal.new(kind: Token::Kind::NUMBER, value: value)
         ]
       end
     end
@@ -40,9 +40,9 @@ module Calculator
     class Group
       def to_tokens
         [
-          Token::Operator.new(TokenKind::PAREN_OPEN),
+          Token::Operator.new(Token::Kind::PAREN_OPEN),
           *expr.to_tokens,
-          Token::Operator.new(TokenKind::PAREN_CLOSE)
+          Token::Operator.new(Token::Kind::PAREN_CLOSE)
         ]
       end
     end
@@ -50,10 +50,10 @@ module Calculator
     class Function
       def to_tokens
         [
-          Token::Operator.new(TokenKind::SQRT), # Only sqrt for now
-          Token::Operator.new(TokenKind::PAREN_OPEN),
+          Token::Operator.new(Token::Kind::SQRT), # Only sqrt for now
+          Token::Operator.new(Token::Kind::PAREN_OPEN),
           *expr.to_tokens,
-          Token::Operator.new(TokenKind::PAREN_CLOSE)
+          Token::Operator.new(Token::Kind::PAREN_CLOSE)
         ]
       end
     end
