@@ -4,13 +4,12 @@ The calculator accepts expressions via ~stdin~:
 echo '2 / (3 - 1)' | ./bin/calculator
 #+end_src
 
-** Supported operators:
-- +
-- -
-- /
-- *
-- ~sqrt~
-- Groups via ~(~ and ~)~
+** Supported operations:
+- Arithmetic operators: ~+, -, *, /~
+- Negative numbers using the unary operator ~-~
+- Parentheses: ( and )
+- All whitespaces are treated as not significant
+- ~sqrt~ function (e.g. ~sqrt(4*4)~)
 
 * Used gems
 - ~propcheck~ - for property-based tests
