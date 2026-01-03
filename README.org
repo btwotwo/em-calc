@@ -4,6 +4,14 @@ The calculator accepts expressions via ~stdin~:
 echo '2 / (3 - 1)' | ./bin/calculator
 #+end_src
 
+** Supported operators:
+- +
+- -
+- /
+- *
+- ~sqrt~
+- Groups via ~(~ and ~)~
+
 * Used gems
 - ~propcheck~ - for property-based tests
 - ~solargraph~ - LSP server
